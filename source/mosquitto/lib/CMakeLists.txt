@@ -83,6 +83,18 @@ if (WITH_SRV)
 	endif (ARES_HEADER)
 endif (WITH_SRV)
 
+if (WIN32)
+	include( Windows-MyDllVersion )
+	generate_product_dll_version(MOSQ_C_VERSION_FILES
+		NAME "libmosquitto - MQTT version 5.0/3.1.1 client library"
+		VERSION_MAJOR ${MOSQ_VER_MAJOR}
+		VERSION_MINOR ${MOSQ_VER_MINOR}
+		VERSION_PATCH ${MOSQ_VER_PATCH}
+		VERSION_REVISION ${MY_REVISION}
+		ORIGINAL_FILENAME "mosquitto.dll")
+	set (C_SRC ${C_SRC} ${MOSQ_C_VERSION_FILES})
+endif (WIN32)
+
 add_library(libmosquitto SHARED ${C_SRC})
 set_target_properties(libmosquitto PROPERTIES
 	POSITION_INDEPENDENT_CODE 1

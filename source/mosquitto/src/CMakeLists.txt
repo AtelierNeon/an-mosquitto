@@ -72,6 +72,18 @@ set (MOSQ_SRCS
 	will_delay.c
 	../lib/will_mosq.c ../lib/will_mosq.h)
 
+if (WIN32)
+	include( Windows-MyExeVersion )
+	generate_product_exe_version(MOSQ_VERSION_FILES
+		NAME "mosquitto - an MQTT broker"
+		ICON ${mosquitto_SOURCE_DIR}/logo/mosquitto.ico
+		VERSION_MAJOR ${MOSQ_VER_MAJOR}
+		VERSION_MINOR ${MOSQ_VER_MINOR}
+		VERSION_PATCH ${MOSQ_VER_PATCH}
+		VERSION_REVISION ${MY_REVISION}
+		ORIGINAL_FILENAME "mosquitto.exe")
+	set (MOSQ_SRCS ${MOSQ_SRCS} ${MOSQ_VERSION_FILES})
+endif (WIN32)
 
 if (WITH_BUNDLED_DEPS)
 	include_directories(${mosquitto_SOURCE_DIR} ${mosquitto_SOURCE_DIR}/deps)

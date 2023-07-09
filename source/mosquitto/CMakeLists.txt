@@ -10,6 +10,16 @@ cmake_policy(SET CMP0042 NEW)
 project(mosquitto)
 set (VERSION 2.0.15)
 
+## Separate version number into 4 parts
+string(REGEX MATCHALL "[0-9]+" _my_ver_LIST "${VERSION}")
+list(LENGTH _my_ver_LIST _my_list_len)
+list(GET _my_ver_LIST 0 MOSQ_VER_MAJOR)
+list(GET _my_ver_LIST 1 MOSQ_VER_MINOR)
+list(GET _my_ver_LIST 2 MOSQ_VER_PATCH)
+if(_my_list_len EQUAL 4)
+	list(GET _my_ver_LIST 3 MOSQ_VER_PATCHLEVEL)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
 add_definitions (-DCMAKE -DVERSION=\"${VERSION}\")

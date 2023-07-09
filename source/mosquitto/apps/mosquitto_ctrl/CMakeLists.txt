@@ -8,7 +8,7 @@ if (WITH_TLS AND CJSON_FOUND)
 
 	link_directories(${CJSON_DIR})
 
-	add_executable(mosquitto_ctrl
+	set (MOSQ_CTRL_SRCS
 		mosquitto_ctrl.c mosquitto_ctrl.h
 		client.c
 		dynsec.c
@@ -20,6 +20,23 @@ if (WITH_TLS AND CJSON_FOUND)
 		../../src/memory_public.c
 		options.c
 		../../src/password_mosq.c ../../src/password_mosq.h
+		)
+
+	if (WIN32)
+		include( Windows-MyExeVersion )
+		generate_product_exe_version(MOSQ_CTRL_VERSION_FILES
+			NAME "mosquitto_ctrl - a tool for initialising/configuring a Mosquitto broker instance"
+			ICON ${mosquitto_SOURCE_DIR}/logo/mosquitto.ico
+			VERSION_MAJOR ${MOSQ_VER_MAJOR}
+			VERSION_MINOR ${MOSQ_VER_MINOR}
+			VERSION_PATCH ${MOSQ_VER_PATCH}
+			VERSION_REVISION ${MY_REVISION}
+			ORIGINAL_FILENAME "mosquitto_ctrl.exe")
+		set (MOSQ_CTRL_SRCS ${MOSQ_CTRL_SRCS} ${MOSQ_CTRL_VERSION_FILES})
+	endif (WIN32)
+
+	add_executable(mosquitto_ctrl
+		${MOSQ_CTRL_SRCS}
 		)
 
 	if (WITH_STATIC_LIBRARIES)
