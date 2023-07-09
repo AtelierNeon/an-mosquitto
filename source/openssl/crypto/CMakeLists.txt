@@ -66,6 +66,8 @@ include_directories( BEFORE SYSTEM
   ${CMAKE_CURRENT_BINARY_DIR}/ # buildinf.h
   ${PROJECT_BINARY_DIR}/include # public|crypto|internal
   ${PROJECT_SOURCE_DIR}/ # e_os.h
+  ${PROJECT_SOURCE_DIR}/../zlib/
+  ${PROJECT_BINARY_DIR}/../zlib/
 )
 
 if( BUILD_SHARED_LIBS )
@@ -304,6 +306,8 @@ else()
     target_link_libraries( crypto dl )
   endif()
 endif()
+
+target_link_libraries( crypto zlibstatic )
 
 set_target_properties( crypto PROPERTIES
   VERSION "${LIB_VERSION}" SOVERSION "${LIB_SOVERSION}" )
