@@ -189,7 +189,7 @@ if (UNIX)
 endif (UNIX)
 
 if (WIN32)
-	set (MOSQ_LIBS ${MOSQ_LIBS} ws2_32)
+	set (MOSQ_LIBS ${MOSQ_LIBS} ws2_32 advapi32)
 endif (WIN32)
 
 if (WITH_WEBSOCKETS)
