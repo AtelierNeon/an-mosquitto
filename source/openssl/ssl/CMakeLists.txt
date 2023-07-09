@@ -43,6 +43,18 @@ include_directories( BEFORE SYSTEM
   ${PROJECT_SOURCE_DIR}/ # e_os.h
 )
 
+if (WIN32)
+  include( Windows-MyDllVersion )
+  generate_product_dll_version(OPENSSL_SSL_VERSION_FILES
+    NAME "ssl - OpenSSL SSL/TLS library"
+    VERSION_MAJOR ${OPENSSL_VERSION_MAJOR}
+    VERSION_MINOR ${OPENSSL_VERSION_MINOR}
+    VERSION_PATCH ${OPENSSL_VERSION_FIX}
+    VERSION_REVISION ${MY_REVISION}
+    ORIGINAL_FILENAME "libssl-1_1.dll")
+  set (LIBSRC ${LIBSRC} ${OPENSSL_SSL_VERSION_FILES})
+endif (WIN32)
+
 add_library( ssl ${LIBSRC} )
 
 target_include_directories( ssl PUBLIC ${PROJECT_BINARY_DIR}/include )

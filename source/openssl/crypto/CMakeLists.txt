@@ -278,6 +278,18 @@ else()
   add_submodule ( . threads_pthread.c )
 endif()
 
+if (WIN32)
+  include( Windows-MyDllVersion )
+  generate_product_dll_version(OPENSSL_CRYPTO_VERSION_FILES
+    NAME "crypto - OpenSSL cryptographic library"
+    VERSION_MAJOR ${OPENSSL_VERSION_MAJOR}
+    VERSION_MINOR ${OPENSSL_VERSION_MINOR}
+    VERSION_PATCH ${OPENSSL_VERSION_FIX}
+    VERSION_REVISION ${MY_REVISION}
+    ORIGINAL_FILENAME "libcrypto-1_1.dll")
+  set (LIBSRC ${LIBSRC} ${OPENSSL_CRYPTO_VERSION_FILES})
+endif (WIN32)
+
 add_library( crypto ${LIBSRC} ${OBJECTS_SRC} )
 
 target_include_directories( crypto PUBLIC ${PROJECT_BINARY_DIR}/include )

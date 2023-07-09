@@ -52,6 +52,19 @@ if( WIN32 )
   list( APPEND E_SRC win32_init.c )
 endif()
 
+if (WIN32)
+  include( Windows-MyExeVersion )
+  generate_product_exe_version(OPENSSL_APP_VERSION_FILES
+    NAME "openssl - OpenSSL command line program"
+    ICON ${openssl_SOURCE_DIR}/openssl.ico
+    VERSION_MAJOR ${OPENSSL_VERSION_MAJOR}
+    VERSION_MINOR ${OPENSSL_VERSION_MINOR}
+    VERSION_PATCH ${OPENSSL_VERSION_FIX}
+    VERSION_REVISION ${MY_REVISION}
+    ORIGINAL_FILENAME "openssl.exe")
+  set (E_SRC ${E_SRC} ${OPENSSL_APP_VERSION_FILES})
+endif (WIN32)
+
 add_executable( openssl ${E_SRC} )
 
 target_link_libraries( openssl crypto ssl )

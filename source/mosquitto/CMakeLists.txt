@@ -43,7 +43,17 @@ option(WITH_TLS_PSK
 option(WITH_EC
 	"Include Elliptic Curve support (requires WITH_TLS)?" ON)
 if (WITH_TLS)
-	find_package(OpenSSL REQUIRED)
+	find_package(OpenSSL)
+	if (OPENSSL_FOUND)
+		message(STATUS ${OPENSSL_FOUND})
+	else (OPENSSL_FOUND)
+		message(STATUS "Use sibling OpenSSL.")
+		set(OPENSSL_FOUND ON)
+		set(OPENSSL_INCLUDE_DIR "${mosquitto_SOURCE_DIR}/../openssl/include/")
+		set(OPENSSL_CRYPTO_LIBRARIES crypto)
+		set(OPENSSL_SSL_LIBRARIES ssl)
+		set(OPENSSL_LIBRARIES ${OPENSSL_CRYPTO_LIBRARIES} ${OPENSSL_SSL_LIBRARIES})
+	endif (OPENSSL_FOUND)
 	add_definitions("-DWITH_TLS")
 
 	if (WITH_TLS_PSK)
