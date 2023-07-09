@@ -5,6 +5,16 @@ project(cJSON
     VERSION 1.7.16
     LANGUAGES C)
 
+## Separate version number into 4 parts
+string(REGEX MATCHALL "[0-9]+" _my_ver_LIST "${PROJECT_VERSION}")
+list(LENGTH _my_ver_LIST _my_list_len)
+list(GET _my_ver_LIST 0 CJSON_VER_MAJOR)
+list(GET _my_ver_LIST 1 CJSON_VER_MINOR)
+list(GET _my_ver_LIST 2 CJSON_VER_PATCH)
+if(_my_list_len EQUAL 4)
+    list(GET _my_ver_LIST 3 CJSON_VER_PATCHLEVEL)
+endif()
+
 cmake_policy(SET CMP0054 NEW)  # set CMP0054 policy
 
 include(GNUInstallDirs)
@@ -118,7 +128,7 @@ set(CJSON_LIB cjson)
 file(GLOB HEADERS cJSON.h)
 set(SOURCES cJSON.c)
 
-option(BUILD_SHARED_AND_STATIC_LIBS "Build both shared and static libraries" Off)
+option(BUILD_SHARED_AND_STATIC_LIBS "Build both shared and static libraries" ON)
 option(CJSON_OVERRIDE_BUILD_SHARED_LIBS "Override BUILD_SHARED_LIBS with CJSON_BUILD_SHARED_LIBS" OFF)
 option(CJSON_BUILD_SHARED_LIBS "Overrides BUILD_SHARED_LIBS if CJSON_OVERRIDE_BUILD_SHARED_LIBS is enabled" ON)
 option(ENABLE_CJSON_VERSION_SO "Enables cJSON so version" ON)
@@ -129,6 +139,17 @@ else()
     set(CJSON_LIBRARY_TYPE STATIC)
 endif()
 
+if (WIN32)
+    include( Windows-MyDllVersion )
+    generate_product_dll_version(CJSON_VERSION_FILES
+        NAME "cJSON - Ultralightweight JSON parser in ANSI C"
+        VERSION_MAJOR ${CJSON_VER_MAJOR}
+        VERSION_MINOR ${CJSON_VER_MINOR}
+        VERSION_PATCH ${CJSON_VER_PATCH}
+        VERSION_REVISION ${MY_REVISION}
+        ORIGINAL_FILENAME "cjson.dll")
+    set (SOURCES ${SOURCES} ${CJSON_VERSION_FILES})
+endif (WIN32)
 
 if (NOT BUILD_SHARED_AND_STATIC_LIBS)
     add_library("${CJSON_LIB}" "${CJSON_LIBRARY_TYPE}" "${HEADERS}" "${SOURCES}")
