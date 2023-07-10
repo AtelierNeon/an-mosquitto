@@ -6,6 +6,11 @@ include(${PROJECT_BINARY_DIR}/src/lib/Makefile.inc.cmake)
 # Write ares_config.h configuration file.  This is used only for the build.
 CONFIGURE_FILE (ares_config.h.cmake ${PROJECT_BINARY_DIR}/ares_config.h)
 
+if (WIN32)
+	set( CMAKE_SHARED_LIBRARY_PREFIX "lib" )
+	set( CMAKE_STATIC_LIBRARY_PREFIX "lib" )
+endif()
+
 # Build the dynamic/shared library
 IF (CARES_SHARED)
 	ADD_LIBRARY (${PROJECT_NAME} SHARED ${CSOURCES})

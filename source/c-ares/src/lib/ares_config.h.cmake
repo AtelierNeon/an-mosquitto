@@ -253,8 +253,12 @@
 /* Define to 1 if you have the strcmpi function. */
 #cmakedefine HAVE_STRCMPI
 
+#ifdef _WIN32
+#define HAVE_STRDUP
+#else
 /* Define to 1 if you have the strdup function. */
 #cmakedefine HAVE_STRDUP
+#endif
 
 /* Define to 1 if you have the stricmp function. */
 #cmakedefine HAVE_STRICMP
