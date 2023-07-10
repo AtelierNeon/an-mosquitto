@@ -161,6 +161,11 @@ endif()
 
 add_subdir_include_dirs(event-libs)
 
+if (WIN32)
+	set( CMAKE_SHARED_LIBRARY_PREFIX "lib" )
+	set( CMAKE_STATIC_LIBRARY_PREFIX "lib" )
+endif()
+
 if (LWS_WITH_STATIC)
     if (LWS_STATIC_PIC)
         set(CMAKE_POSITION_INDEPENDENT_CODE ON)
