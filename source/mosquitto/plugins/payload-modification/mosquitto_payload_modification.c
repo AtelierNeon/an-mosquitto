@@ -32,6 +32,8 @@ Contributors:
  *
  * Note that this only works on Mosquitto 2.0 or later.
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
 
