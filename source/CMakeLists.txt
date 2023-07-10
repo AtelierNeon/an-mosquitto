@@ -3,6 +3,7 @@ project(main)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake-modules/")
 
+add_subdirectory(c-ares)
 add_subdirectory(cjson)
 add_subdirectory(libwebsockets)
 add_subdirectory(mosquitto)
