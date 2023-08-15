@@ -1,24 +1,30 @@
-cmake_minimum_required(VERSION 3.1)
-project(main)
+cmake_minimum_required (VERSION 3.1)
 
-message(STATUS "My build revision: ${MY_REVISION}")
+## Dummy basic information for meta project
+project (main)
 
-option(BUILD_WITH_SHARED_VCRT "Build library with shared vc runtime library." ON)
-option(BUILD_WITH_STATIC_VCRT "Build library without shared vc runtime library." OFF)
-option(BUILD_WITH_WORKAROUND_ARM64RT "Build library with workaround arm64rt.lib library" OFF)
-option(BUILD_WITH_WORKAROUND_OPT_GY "Build library with workaround /Gy compiler option" OFF)
-option(BUILD_WITH_WORKAROUND_SOFTINTRIN "Build library with workaround softintrin.lib library" OFF)
-option(BUILD_WITH_WORKAROUND_SPECTRE "Build library with workaround spectre mitigation library" OFF)
+message (STATUS "My project revision: ${MY_REVISION}")
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake-modules/")
+## Project options
+option (BUILD_WITH_SHARED_VCRT "Build library with shared vc runtime library." OFF)
+option (BUILD_WITH_STATIC_VCRT "Build library without shared vc runtime library." OFF)
+option (BUILD_WITH_WORKAROUND_ARM64RT "Build library with workaround arm64rt.lib library" OFF)
+option (BUILD_WITH_WORKAROUND_OPT_GY "Build library with workaround /Gy compiler option" OFF)
+option (BUILD_WITH_WORKAROUND_SOFTINTRIN "Build library with workaround softintrin.lib library" OFF)
+option (BUILD_WITH_WORKAROUND_SPECTRE "Build library with workaround spectre mitigation library" OFF)
 
+## Append custom CMake module path
+list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake-modules/")
+
+## Import custom CMake modules
 if (WIN32)
-	include(MSVC-MyRuntimeConfig)
+    include (MSVC-MyRuntimeConfig)
 endif (WIN32)
 
-add_subdirectory(c-ares)
-add_subdirectory(cjson)
-add_subdirectory(libwebsockets)
-add_subdirectory(mosquitto)
-add_subdirectory(openssl)
-add_subdirectory(zlib)
+## Process sub-components
+add_subdirectory (c-ares)
+add_subdirectory (cjson)
+add_subdirectory (libwebsockets)
+add_subdirectory (mosquitto)
+add_subdirectory (openssl)
+add_subdirectory (zlib)
