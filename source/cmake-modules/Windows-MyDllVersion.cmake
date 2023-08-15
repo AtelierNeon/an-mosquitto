@@ -2,13 +2,13 @@ include (CMakeParseArguments)
 
 set (GenerateProductVersionCurrentDir ${CMAKE_CURRENT_LIST_DIR})
 
-# generate_product_dll_version() function
+# generate_product_dll_version () function
 #
 # This function uses Windows-MyDllVersionInfo.in template file and Windows-MyDllVersionResource.rc file
 # to generate WIN32 resource with version information and general resource strings.
 #
 # Usage:
-#   generate_product_dll_version(
+#   generate_product_dll_version (
 #     SomeOutputResourceVariable
 #     NAME MyGreatProject
 #     VERSION_MAJOR 2
@@ -19,7 +19,7 @@ set (GenerateProductVersionCurrentDir ${CMAKE_CURRENT_LIST_DIR})
 # where BUILD_COUNTER and BUILD_REVISION could be values from your CI server.
 #
 # You can use generated resource for your executable targets:
-#   add_executable(target-name ${target-files} ${SomeOutputResourceVariable})
+#   add_executable (target-name ${target-files} ${SomeOutputResourceVariable})
 #
 # You can specify resource strings in arguments:
 #   NAME               - name of executable (no defaults, ex: Microsoft Word)
@@ -34,7 +34,7 @@ set (GenerateProductVersionCurrentDir ${CMAKE_CURRENT_LIST_DIR})
 #   ORIGINAL_FILENAME  - ${NAME} is default
 #   INTERNAL_NAME      - ${NAME} is default
 #   FILE_DESCRIPTION   - ${NAME} is default
-function(generate_product_dll_version outfiles)
+function (generate_product_dll_version outfiles)
     set (options)
     set (oneValueArgs
         NAME
@@ -50,52 +50,54 @@ function(generate_product_dll_version outfiles)
         INTERNAL_NAME
         FILE_DESCRIPTION)
     set (multiValueArgs)
-    cmake_parse_arguments(PRODUCT "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments (PRODUCT "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     if (NOT PRODUCT_BUNDLE OR "${PRODUCT_BUNDLE}" STREQUAL "")
-        set(PRODUCT_BUNDLE "${PRODUCT_NAME}")
+        set (PRODUCT_BUNDLE "${PRODUCT_NAME}")
     endif()
 
     if (NOT PRODUCT_VERSION_MAJOR OR "${PRODUCT_VERSION_MAJOR}" STREQUAL "")
-        set(PRODUCT_VERSION_MAJOR 0)
+        set (PRODUCT_VERSION_MAJOR 0)
     endif()
     if (NOT PRODUCT_VERSION_MINOR OR "${PRODUCT_VERSION_MINOR}" STREQUAL "")
-        set(PRODUCT_VERSION_MINOR 0)
+        set (PRODUCT_VERSION_MINOR 0)
     endif()
     if (NOT PRODUCT_VERSION_PATCH OR "${PRODUCT_VERSION_PATCH}" STREQUAL "")
-        set(PRODUCT_VERSION_PATCH 0)
+        set (PRODUCT_VERSION_PATCH 0)
     endif()
     if (NOT PRODUCT_VERSION_REVISION OR "${PRODUCT_VERSION_REVISION}" STREQUAL "")
-        set(PRODUCT_VERSION_REVISION 0)
+        set (PRODUCT_VERSION_REVISION 0)
     endif()
 
     if (NOT PRODUCT_COMPANY_COPYRIGHT OR "${PRODUCT_COMPANY_COPYRIGHT}" STREQUAL "")
-        string(TIMESTAMP PRODUCT_CURRENT_YEAR "%Y")
-        set(PRODUCT_COMPANY_COPYRIGHT "${PRODUCT_COMPANY_NAME} (C) Copyright ${PRODUCT_CURRENT_YEAR}")
+        string (TIMESTAMP PRODUCT_CURRENT_YEAR "%Y")
+        set (PRODUCT_COMPANY_COPYRIGHT "${PRODUCT_COMPANY_NAME} (C) Copyright ${PRODUCT_CURRENT_YEAR}")
     endif()
     if (NOT PRODUCT_COMMENTS OR "${PRODUCT_COMMENTS}" STREQUAL "")
-        set(PRODUCT_COMMENTS "${PRODUCT_NAME} v${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}")
+        set (PRODUCT_COMMENTS "${PRODUCT_NAME} v${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}")
     endif()
     if (NOT PRODUCT_ORIGINAL_FILENAME OR "${PRODUCT_ORIGINAL_FILENAME}" STREQUAL "")
-        set(PRODUCT_ORIGINAL_FILENAME "${PRODUCT_NAME}")
+        set (PRODUCT_ORIGINAL_FILENAME "${PRODUCT_NAME}")
     endif()
     if (NOT PRODUCT_INTERNAL_NAME OR "${PRODUCT_INTERNAL_NAME}" STREQUAL "")
-        set(PRODUCT_INTERNAL_NAME "${PRODUCT_NAME}")
+        set (PRODUCT_INTERNAL_NAME "${PRODUCT_NAME}")
     endif()
     if (NOT PRODUCT_FILE_DESCRIPTION OR "${PRODUCT_FILE_DESCRIPTION}" STREQUAL "")
-        set(PRODUCT_FILE_DESCRIPTION "${PRODUCT_NAME}")
+        set (PRODUCT_FILE_DESCRIPTION "${PRODUCT_NAME}")
     endif()
 
-    set (_VersionInfoFile ${CMAKE_CURRENT_BINARY_DIR}/Windows-MyDllVersionInfo.h)
-    set (_VersionResourceFile ${CMAKE_CURRENT_BINARY_DIR}/Windows-MyDllVersionResource.rc)
-    configure_file(
+    set (PRODUCT_VERSION "${PRODUCT_VERSION_MAJOR}.${PRODUCT_VERSION_MINOR}.${PRODUCT_VERSION_PATCH}.${PRODUCT_VERSION_REVISION}")
+    string (MD5 _VersionDigest "${PRODUCT_BUNDLE}_${PRODUCT_NAME}_${PRODUCT_VERSION}")
+    set (_VersionInfoFile ${CMAKE_CURRENT_BINARY_DIR}/rc.${_VersionDigest}/Windows-MyDllVersionInfo.h)
+    set (_VersionResourceFile ${CMAKE_CURRENT_BINARY_DIR}/rc.${_VersionDigest}/Windows-MyDllVersionResource.rc)
+    configure_file (
         ${GenerateProductVersionCurrentDir}/Windows-MyDllVersionInfo.in
         ${_VersionInfoFile}
         @ONLY)
-    configure_file(
+    configure_file (
         ${GenerateProductVersionCurrentDir}/Windows-MyDllVersionResource.rc
         ${_VersionResourceFile}
         COPYONLY)
-    list(APPEND ${outfiles} ${_VersionInfoFile} ${_VersionResourceFile})
+    list (APPEND ${outfiles} ${_VersionInfoFile} ${_VersionResourceFile})
     set (${outfiles} ${${outfiles}} PARENT_SCOPE)
 endfunction()
