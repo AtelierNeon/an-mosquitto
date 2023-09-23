@@ -15,27 +15,37 @@ $CmakeToolsetToGeneratorMap = @{
         'v142' = 'Visual Studio 16 2019'
         'v143' = 'Visual Studio 17 2022'
 }
-$SourceFolder = 'source'
-$TempRootFolder = 'temp'
-$TempBuildFolder = Join-Path -Path $TempRootFolder -ChildPath 'b'
+$ProjectFolder = Join-Path -Path $PSScriptRoot -ChildPath '..'
+$SourceFolder = $ProjectFolder
+$TempRootFolder = Join-Path -Path $ProjectFolder -ChildPath 'build'
+$TempBuildFolder = Join-Path -Path $TempRootFolder -ChildPath 't'
 $TempInstallFolder = Join-Path -Path $TempRootFolder -ChildPath 'i'
 
 ##
 ## Project config
 ##
+####
+#### Project level config
+####
 $ProjectRevision = if ($Env:BUILD_NUMBER) {$Env:BUILD_NUMBER} else {'9999'}
-$ProjectShouldDisable32BitBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_32BIT_Build) {$Env:MY_PROJECT_SHOULD_DISABLE_32BIT_Build} else {'OFF'}
-$ProjectShouldDisable64BitBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_64BIT_Build) {$Env:MY_PROJECT_SHOULD_DISABLE_64BIT_Build} else {'OFF'}
-$ProjectShouldDisableArmBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_ARM_Build) {$Env:MY_PROJECT_SHOULD_DISABLE_ARM_Build} else {'OFF'}
-$ProjectShouldDisableArm64ecBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_ARM64EC_Build) {$Env:MY_PROJECT_SHOULD_DISABLE_ARM64EC_Build} else {'OFF'}
-$ProjectShouldDisableX86Build = if ($Env:MY_PROJECT_SHOULD_DISABLE_X86_Build) {$Env:MY_PROJECT_SHOULD_DISABLE_X86_Build} else {'OFF'}
+$ProjectShouldDisableCleanBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_CLEAN_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_CLEAN_BUILD} else {'OFF'}
+$ProjectShouldDisable32BitBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_32BIT_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_32BIT_BUILD} else {'OFF'}
+$ProjectShouldDisable64BitBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_64BIT_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_64BIT_BUILD} else {'OFF'}
+$ProjectShouldDisableArmBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_ARM_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_ARM_BUILD} else {'OFF'}
+$ProjectShouldDisableArm64ecBuild = if ($Env:MY_PROJECT_SHOULD_DISABLE_ARM64EC_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_ARM64EC_BUILD} else {'OFF'}
+$ProjectShouldDisableX86Build = if ($Env:MY_PROJECT_SHOULD_DISABLE_X86_BUILD) {$Env:MY_PROJECT_SHOULD_DISABLE_X86_BUILD} else {'OFF'}
 $ProjectToolset = if ($Env:MY_PROJECT_CMAKE_TOOLSET) {$Env:MY_PROJECT_CMAKE_TOOLSET} else {'v142'}
 $ProjectReleaseType = if ($Env:MY_PROJECT_RELEASE_TYPE) {$Env:MY_PROJECT_RELEASE_TYPE} else {'Debug'}
+$ProjectWithOpenSSL111Preferred = if ($Env:MY_PROJECT_WITH_OPENSSL_1_1_1_PREFERRED) {$Env:MY_PROJECT_WITH_OPENSSL_1_1_1_PREFERRED} else {'OFF'}
+$ProjectWithOpenSSL30Preferred = if ($Env:MY_PROJECT_WITH_OPENSSL_3_0_PREFERRED) {$Env:MY_PROJECT_WITH_OPENSSL_3_0_PREFERRED} else {'OFF'}
 $ProjectWithSharedVcrt = if ($Env:MY_PROJECT_WITH_SHARED_VCRT) {$Env:MY_PROJECT_WITH_SHARED_VCRT} else {'OFF'}
 $ProjectWithStaticVcrt = if ($Env:MY_PROJECT_WITH_STATIC_VCRT) {$Env:MY_PROJECT_WITH_STATIC_VCRT} else {'ON'}
 $ProjectWithWorkaroundArm64rt = if ($Env:MY_PROJECT_WITH_WORKAROUND_ARM64RT) {$Env:MY_PROJECT_WITH_WORKAROUND_ARM64RT} else {'OFF'}
 $ProjectWithWorkaroundOptGy = if ($Env:MY_PROJECT_WITH_WORKAROUND_OPT_GY) {$Env:MY_PROJECT_WITH_WORKAROUND_OPT_GY} else {'OFF'}
 $ProjectWithWorkaroundSpectre = if ($Env:MY_PROJECT_WITH_WORKAROUND_SPECTRE) {$Env:MY_PROJECT_WITH_WORKAROUND_SPECTRE} else {'OFF'}
+####
+#### Project component level config
+####
 $ProjectOpenSslWithSharedLibraries = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES} else {'OFF'}
 $ProjectOpenSslWithSharedZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB} else {'OFF'}
 $ProjectOpenSslWithZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_ZLIB} else {'OFF'}
@@ -121,12 +131,15 @@ $MyCmakePlatformToBuildListString = $MyCmakePlatformToBuildList -join ", "
 ## Print build information
 Write-Information "[PowerShell] Project information: revision: `"$ProjectRevision`""
 Write-Information "[PowerShell] Project information: release type: `"$ProjectReleaseType`""
+Write-Information "[PowerShell] Project information: Disable clean build: $ProjectShouldDisableCleanBuild"
 Write-Information "[PowerShell] Project information: CMake generator: `"$MyCmakeGenerator`""
 Write-Information "[PowerShell] Project information: CMake toolset: `"$ProjectToolset`""
 Write-Information "[PowerShell] Project information: CMake platform to build: $MyCmakePlatformToBuildListString"
-Write-Information "[PowerShell] Project information: OpenSSL with shared libraries: $ProjectOpenSslWithSharedLibraries"
-Write-Information "[PowerShell] Project information: OpenSSL with shared Zlib: $ProjectOpenSslWithSharedZlib"
-Write-Information "[PowerShell] Project information: OpenSSL with Zlib: $ProjectOpenSslWithZlib"
+Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 1.1.1: $ProjectWithOpenSSL111Preferred"
+Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 3.0: $ProjectWithOpenSSL30Preferred"
+Write-Information "[PowerShell] Component information: OpenSSL with shared libraries: $ProjectOpenSslWithSharedLibraries"
+Write-Information "[PowerShell] Component information: OpenSSL with shared Zlib: $ProjectOpenSslWithSharedZlib"
+Write-Information "[PowerShell] Component information: OpenSSL with Zlib: $ProjectOpenSslWithZlib"
 
 
 
@@ -140,32 +153,40 @@ Write-Information "[PowerShell] Detecting $SourceFolder folder ... FOUND"
 
 
 
-## Clean temp folder
-$MyIoError = $null
-Write-Information "[PowerShell] Cleaning $TempRootFolder folder ..."
-if (Test-Path -Path $TempRootFolder) {
-    Write-Verbose "[PowerShell] Removing $TempRootFolder folder ..."
-    Remove-Item -Recurse -Force $TempRootFolder -ErrorVariable MyIoError
+## Create or clean temp folder
+if (-not ('ON'.Equals($ProjectShouldDisableCleanBuild))) {
+    $MyIoError = $null
+    Write-Information "[PowerShell] Cleaning $TempRootFolder folder ..."
+    if (Test-Path -Path $TempRootFolder) {
+        Write-Verbose "[PowerShell] Removing $TempRootFolder folder ..."
+        Remove-Item -Recurse -Force $TempRootFolder -ErrorVariable MyIoError
+        if ($MyIoError) {
+            Write-Error "[PowerShell] Remove $TempRootFolder folder ... FAILED"
+            Exit 1
+        }
+    }
+    Write-Information "[PowerShell] Cleaning $TempRootFolder folder ... DONE"
+}
+if (-not (Test-Path -Path $TempBuildFolder)) {
+    $MyIoError = $null
+    Write-Verbose "[PowerShell] Creating $TempBuildFolder folder ..."
+    New-Item -ItemType Directory -Path $TempBuildFolder -ErrorVariable MyIoError | Out-Null
     if ($MyIoError) {
-        Write-Error "[PowerShell] Remove $TempRootFolder folder ... FAILED"
+        Write-Error "[PowerShell] Creating $TempBuildFolder folder ... FAILED"
         Exit 1
     }
+    Write-Verbose "[PowerShell] Creating $TempBuildFolder folder ... DONE"
 }
-$MyIoError = $null
-Write-Verbose "[PowerShell] Creating $TempBuildFolder folder ..."
-New-Item -ItemType Directory -Path $TempBuildFolder -ErrorVariable MyIoError | Out-Null
-if ($MyIoError) {
-    Write-Error "[PowerShell] Creating $TempBuildFolder folder ... FAILED"
-    Exit 1
+if (-not (Test-Path -Path $TempInstallFolder)) {
+    $MyIoError = $null
+    Write-Verbose "[PowerShell] Creating $TempInstallFolder folder ..."
+    New-Item -ItemType Directory -Path $TempInstallFolder -ErrorVariable MyIoError | Out-Null
+    if ($MyIoError) {
+        Write-Error "[PowerShell] Creating $TempInstallFolder folder ... FAILED"
+        Exit 1
+    }
+    Write-Verbose "[PowerShell] Creating $TempInstallFolder folder ... DONE"
 }
-$MyIoError = $null
-Write-Verbose "[PowerShell] Creating $TempInstallFolder folder ..."
-New-Item -ItemType Directory -Path $TempInstallFolder -ErrorVariable MyIoError | Out-Null
-if ($MyIoError) {
-    Write-Error "[PowerShell] Creating $TempInstallFolder folder ... FAILED"
-    Exit 1
-}
-Write-Information "[PowerShell] Cleaning $TempRootFolder folder ... DONE"
 
 
 

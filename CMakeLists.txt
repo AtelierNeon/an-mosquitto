@@ -1,4 +1,9 @@
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.1...3.15.0)
+
+## Special CMake policies
+if (POLICY CMP0091 AND NOT CMAKE_VERSION VERSION_LESS 3.15)
+    cmake_policy (SET CMP0091 NEW)
+endif ()
 
 ## Dummy basic information for meta project
 project (main)
@@ -6,6 +11,8 @@ project (main)
 message (STATUS "My project revision: ${MY_REVISION}")
 
 ## Project options
+option (BUILD_WITH_OPENSSL_1_1_1_PREFERRED "Build library with preferred OpenSSL 1.1.1." OFF)
+option (BUILD_WITH_OPENSSL_3_0_PREFERRED "Build library with preferred OpenSSL 3.0." OFF)
 option (BUILD_WITH_SHARED_VCRT "Build library with shared vc runtime library." OFF)
 option (BUILD_WITH_STATIC_VCRT "Build library without shared vc runtime library." OFF)
 option (BUILD_WITH_WORKAROUND_ARM64RT "Build library with workaround arm64rt.lib library" OFF)
@@ -14,17 +21,17 @@ option (BUILD_WITH_WORKAROUND_SOFTINTRIN "Build library with workaround softintr
 option (BUILD_WITH_WORKAROUND_SPECTRE "Build library with workaround spectre mitigation library" OFF)
 
 ## Append custom CMake module path
-list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake-modules/")
+list (APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/source/cmake-modules/")
 
 ## Import custom CMake modules
 if (WIN32)
     include (MSVC-MyRuntimeConfig)
-endif (WIN32)
+endif ()
 
 ## Process sub-components
-add_subdirectory (c-ares)
-add_subdirectory (cjson)
-add_subdirectory (libwebsockets)
-add_subdirectory (mosquitto)
-add_subdirectory (openssl)
-add_subdirectory (zlib)
+add_subdirectory (source/c-ares)
+add_subdirectory (source/cjson)
+add_subdirectory (source/libwebsockets)
+add_subdirectory (source/mosquitto)
+add_subdirectory (source/openssl)
+add_subdirectory (source/zlib)
