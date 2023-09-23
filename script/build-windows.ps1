@@ -46,6 +46,8 @@ $ProjectWithWorkaroundSpectre = if ($Env:MY_PROJECT_WITH_WORKAROUND_SPECTRE) {$E
 ####
 #### Project component level config
 ####
+$ProjectCaresWithDisabledApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_APPS} else {'OFF'}
+$ProjectCaresWithDisabledTestApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS} else {'OFF'}
 $ProjectOpenSslWithSharedLibraries = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES} else {'OFF'}
 $ProjectOpenSslWithSharedZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB} else {'OFF'}
 $ProjectOpenSslWithZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_ZLIB} else {'OFF'}
@@ -59,6 +61,12 @@ $MyCmakeCommonArgumentList = @(
         "-T $ProjectToolset",
         "-DMY_REVISION=$ProjectRevision"
 )
+if ('ON'.Equals($ProjectCaresWithDisabledApps)) {
+    $MyCmakeCommonArgumentList += "-DCARES_WITH_DISABLED_APPS=$ProjectCaresWithDisabledApps"
+}
+if ('ON'.Equals($ProjectCaresWithDisabledTestApps)) {
+    $MyCmakeCommonArgumentList += "-DCARES_WITH_DISABLED_TEST_APPS=$ProjectCaresWithDisabledTestApps"
+}
 if ('ON'.Equals($ProjectOpenSslWithSharedLibraries)) {
     $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_SHARED_LIBRARIES=$ProjectOpenSslWithSharedLibraries"
 }
@@ -141,6 +149,8 @@ Write-Information "[PowerShell] Project information: CMake toolset: `"$ProjectTo
 Write-Information "[PowerShell] Project information: CMake platform to build: $MyCmakePlatformToBuildListString"
 Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 1.1.1: $ProjectWithOpenSSL111Preferred"
 Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 3.0: $ProjectWithOpenSSL30Preferred"
+Write-Information "[PowerShell] Component information: c-ares with disabled apps: $ProjectCaresWithDisabledApps"
+Write-Information "[PowerShell] Component information: c-ares with disabled test apps: $ProjectCaresWithDisabledTestApps"
 Write-Information "[PowerShell] Component information: OpenSSL with shared libraries: $ProjectOpenSslWithSharedLibraries"
 Write-Information "[PowerShell] Component information: OpenSSL with shared Zlib: $ProjectOpenSslWithSharedZlib"
 Write-Information "[PowerShell] Component information: OpenSSL with Zlib: $ProjectOpenSslWithZlib"

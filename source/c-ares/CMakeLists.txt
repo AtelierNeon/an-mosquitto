@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.1.0)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.1.0...3.15.0)
 
 INCLUDE (CheckIncludeFiles)
 INCLUDE (CheckTypeSize)
@@ -9,6 +9,8 @@ INCLUDE (CheckStructHasMember)
 INCLUDE (CheckLibraryExists)
 
 PROJECT (c-ares LANGUAGES C VERSION "1.19.1" )
+
+message (STATUS "c-ares version ${PROJECT_VERSION}")
 
 # Set this version before release
 SET (CARES_VERSION "${PROJECT_VERSION}")
@@ -29,7 +31,7 @@ INCLUDE (GNUInstallDirs) # include this *AFTER* PROJECT(), otherwise paths are w
 SET (CARES_LIB_VERSIONINFO "8:1:6")
 
 
-OPTION (CARES_STATIC     "Build as a static library"                                             OFF)
+OPTION (CARES_STATIC     "Build as a static library"                                             ON)
 OPTION (CARES_SHARED     "Build as a shared library"                                             ON)
 OPTION (CARES_INSTALL    "Create installation targets (chain builders may want to disable this)" ON)
 OPTION (CARES_STATIC_PIC "Build the static library as PIC (position independent)"                OFF)
@@ -38,6 +40,8 @@ OPTION (CARES_BUILD_CONTAINER_TESTS "Build and run container tests (implies CARE
 OPTION (CARES_BUILD_TOOLS "Build tools"                                                          ON)
 SET    (CARES_RANDOM_FILE "/dev/urandom" CACHE STRING "Suitable File / Device Path for entropy, such as /dev/urandom")
 
+OPTION (CARES_WITH_DISABLED_APPS "Build c-ares with disabled apps." OFF)
+OPTION (CARES_WITH_DISABLED_TEST_APPS "Build c-ares with disabled test apps." OFF)
 
 # Tests require static to be enabled on Windows to be able to access otherwise hidden symbols
 IF (CARES_BUILD_TESTS AND (NOT CARES_STATIC) AND WIN32)
@@ -66,6 +70,20 @@ IF (MSVC)
 		SET (config_type)
 		SET (flag_var)
 	ENDIF ()
+ENDIF ()
+
+IF (CARES_WITH_DISABLED_APPS)
+    SET (CARES_BUILD_TOOLS OFF)
+ELSE ()
+    SET (CARES_BUILD_TOOLS ON)
+ENDIF ()
+IF (CARES_WITH_DISABLED_TEST_APPS)
+    SET (CARES_BUILD_TESTS OFF)
+ELSE ()
+    SET (CARES_BUILD_TESTS ON)
+ENDIF ()
+IF (UNIX)
+    SET (CARES_STATIC_PIC ON)
 ENDIF ()
 
 # Keep build organized.
