@@ -4,7 +4,7 @@
 # To configure the build options either use the CMake gui, or run the command
 # line utility including the "-i" option.
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1...3.15.0)
 cmake_policy(SET CMP0042 NEW)
 
 project(mosquitto)
@@ -43,17 +43,10 @@ option(WITH_TLS_PSK
 option(WITH_EC
 	"Include Elliptic Curve support (requires WITH_TLS)?" ON)
 if (WITH_TLS)
-	find_package(OpenSSL)
-	if (OPENSSL_FOUND)
-		message(STATUS ${OPENSSL_FOUND})
-	else (OPENSSL_FOUND)
-		message(STATUS "Use sibling OpenSSL.")
-		set(OPENSSL_FOUND ON)
-		set(OPENSSL_INCLUDE_DIR "${mosquitto_SOURCE_DIR}/../openssl-1_1_1/include/")
-		set(OPENSSL_CRYPTO_LIBRARIES crypto)
-		set(OPENSSL_SSL_LIBRARIES ssl)
-		set(OPENSSL_LIBRARIES ${OPENSSL_CRYPTO_LIBRARIES} ${OPENSSL_SSL_LIBRARIES})
-	endif (OPENSSL_FOUND)
+	find_package(SiblingOpenSSL)
+	if(NOT OPENSSL_FOUND)
+		find_package(OpenSSL REQUIRED)
+	endif(NOT OPENSSL_FOUND)
 	add_definitions("-DWITH_TLS")
 
 	if (WITH_TLS_PSK)
@@ -118,16 +111,14 @@ endif (WITH_DLT)
 
 option(WITH_CJSON "Build with cJSON support (required for dynamic security plugin and useful for mosquitto_sub)?" ON)
 if (WITH_CJSON)
-    FIND_PACKAGE(cJSON)
+    find_package(SiblingcJSON)
+    if (NOT CJSON_FOUND)
+        FIND_PACKAGE(cJSON)
+    endif(CJSON_FOUND)
     if (CJSON_FOUND)
 	    message(STATUS ${CJSON_FOUND})
     else (CJSON_FOUND)
-	    # message(STATUS "Optional dependency cJSON not found. Some features will be disabled.")
-	    message(STATUS "Use sibling cJSON.")
-	    set(CJSON_FOUND ON)
-	    set(CJSON_DIR "${mosquitto_SOURCE_DIR}/../cjson/")
-	    set(CJSON_INCLUDE_DIRS "${CJSON_DIR}/../")
-	    set(CJSON_LIBRARIES cjson-static)
+	    message(STATUS "Optional dependency cJSON not found. Some features will be disabled.")
     endif(CJSON_FOUND)
 endif()
 

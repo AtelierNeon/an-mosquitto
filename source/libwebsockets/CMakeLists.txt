@@ -22,7 +22,7 @@
 # IN THE SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.12...3.15.0)
 include(CheckFunctionExists)
 include(CheckSymbolExists)
 include(CheckIncludeFile)
@@ -319,6 +319,14 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
        set(LWS_SUPPRESS_DEPRECATED_API_WARNINGS 1)
 endif()
 
+option(LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS "Build libwebsockets with disabled test apps." OFF)
+if(LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS)
+	set(LWS_WITHOUT_TESTAPPS ON)
+	set(LWS_WITHOUT_TEST_SERVER ON)
+	set(LWS_WITHOUT_TEST_SERVER_EXTPOLL ON)
+	set(LWS_WITHOUT_TEST_PING ON)
+	set(LWS_WITHOUT_TEST_CLIENT ON)
+endif()
 
 #
 # to use miniz, enable both LWS_WITH_ZLIB and LWS_WITH_MINIZ
@@ -661,7 +669,7 @@ if (WIN32 OR MSVC)
 	endif()
 endif()
 
-CHECK_LIBRARY_EXISTS(cap cap_set_flag "" LWS_HAVE_LIBCAP)
+#CHECK_LIBRARY_EXISTS(cap cap_set_flag "" LWS_HAVE_LIBCAP)
 
 
 if (LWS_WITH_ZLIB AND NOT LWS_WITH_BUNDLED_ZLIB)
