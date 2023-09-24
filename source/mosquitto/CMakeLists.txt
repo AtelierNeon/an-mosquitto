@@ -30,7 +30,8 @@ if (WIN32)
 endif (WIN32)
 
 if(APPLE)
-	set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS} -undefined dynamic_lookup")
+	# https://github.com/eclipse/mosquitto/issues/2858#issuecomment-1664943798
+	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -undefined dynamic_lookup")
 endif(APPLE)
 
 include(GNUInstallDirs)
