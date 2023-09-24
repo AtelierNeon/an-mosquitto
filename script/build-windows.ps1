@@ -49,6 +49,8 @@ $ProjectWithWorkaroundSpectre = if ($Env:MY_PROJECT_WITH_WORKAROUND_SPECTRE) {$E
 $ProjectCaresWithDisabledApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_APPS} else {'OFF'}
 $ProjectCaresWithDisabledTestApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS} else {'OFF'}
 $ProjectCjsonWithDisabledTestApps = if ($Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS} else {'OFF'}
+$ProjectOpenSslWithDeprecatedCiphers = if ($Env:MY_PROJECT_OPENSSL_WITH_DEPRECATED_CIPHERS) {$Env:MY_PROJECT_OPENSSL_WITH_DEPRECATED_CIPHERS} else {'OFF'}
+$ProjectOpenSslWithDisabledApps = if ($Env:MY_PROJECT_OPENSSL_WITH_DISABLED_APPS) {$Env:MY_PROJECT_OPENSSL_WITH_DISABLED_APPS} else {'OFF'}
 $ProjectOpenSslWithSharedLibraries = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES} else {'OFF'}
 $ProjectOpenSslWithSharedZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB} else {'OFF'}
 $ProjectOpenSslWithZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_ZLIB} else {'OFF'}
@@ -71,6 +73,12 @@ if ('ON'.Equals($ProjectCaresWithDisabledTestApps)) {
 if ('ON'.Equals($ProjectCjsonWithDisabledTestApps)) {
     $MyCmakeCommonArgumentList += "-DCJSON_WITH_DISABLED_TEST_APPS=$ProjectCjsonWithDisabledTestApps"
 }
+if ('ON'.Equals($ProjectOpenSslWithDeprecatedCiphers)) {
+    $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_DEPRECATED_CIPHERS=$ProjectOpenSslWithDeprecatedCiphers"
+}
+if ('ON'.Equals($ProjectOpenSslWithDisabledApps)) {
+    $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_DISABLED_APPS=$ProjectOpenSslWithDisabledApps"
+}
 if ('ON'.Equals($ProjectOpenSslWithSharedLibraries)) {
     $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_SHARED_LIBRARIES=$ProjectOpenSslWithSharedLibraries"
 }
@@ -82,6 +90,12 @@ if ('ON'.Equals($ProjectOpenSslWithZlib)) {
 }
 if ('ON'.Equals($ProjectZlibWithDisabledTestApps)) {
     $MyCmakeCommonArgumentList += "-DZLIB_WITH_DISABLED_TEST_APPS=$ProjectZlibWithDisabledTestApps"
+}
+if ('ON'.Equals($ProjectWithOpenSSL111Preferred)) {
+    $MyCmakeCommonArgumentList += "-DBUILD_WITH_OPENSSL_1_1_1_PREFERRED=$ProjectWithOpenSSL111Preferred"
+}
+if ('ON'.Equals($ProjectWithOpenSSL30Preferred)) {
+    $MyCmakeCommonArgumentList += "-DBUILD_WITH_OPENSSL_3_0_PREFERRED=$ProjectWithOpenSSL30Preferred"
 }
 if ('ON'.Equals($ProjectWithSharedVcrt)) {
     $MyCmakeCommonArgumentList += "-DBUILD_WITH_SHARED_VCRT=$ProjectWithSharedVcrt"
@@ -156,6 +170,8 @@ Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 3.
 Write-Information "[PowerShell] Component information: c-ares with disabled apps: $ProjectCaresWithDisabledApps"
 Write-Information "[PowerShell] Component information: c-ares with disabled test apps: $ProjectCaresWithDisabledTestApps"
 Write-Information "[PowerShell] Component information: cJSON with disabled test apps: $ProjectCjsonWithDisabledTestApps"
+Write-Information "[PowerShell] Component information: OpenSSL with deprecated ciphers: $ProjectOpenSslWithDeprecatedCiphers"
+Write-Information "[PowerShell] Component information: OpenSSL with disabled apps: $ProjectOpenSslWithDisabledApps"
 Write-Information "[PowerShell] Component information: OpenSSL with shared libraries: $ProjectOpenSslWithSharedLibraries"
 Write-Information "[PowerShell] Component information: OpenSSL with shared Zlib: $ProjectOpenSslWithSharedZlib"
 Write-Information "[PowerShell] Component information: OpenSSL with Zlib: $ProjectOpenSslWithZlib"
