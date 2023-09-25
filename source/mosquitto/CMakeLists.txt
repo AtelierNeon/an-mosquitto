@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.1...3.15.0)
 cmake_policy(SET CMP0042 NEW)
 
 project(mosquitto)
-set (VERSION 2.0.15)
+set (VERSION 2.0.18)
 
 ## Separate version number into 4 parts
 string(REGEX MATCHALL "[0-9]+" _my_ver_LIST "${VERSION}")

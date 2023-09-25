@@ -32,17 +32,15 @@
  * ============================================================ */
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #  define snprintf sprintf_s
-#  if defined(_MSC_VER) && _MSC_VER < 1800
-#    define EPROTO ECONNABORTED
-#    ifndef ECONNABORTED
-#      define ECONNABORTED WSAECONNABORTED
-#    endif
-#    ifndef ENOTCONN
-#      define ENOTCONN WSAENOTCONN
-#    endif
-#    ifndef ECONNREFUSED
-#      define ECONNREFUSED WSAECONNREFUSED
-#    endif
+#  define EPROTO ECONNABORTED
+#  ifndef ECONNABORTED
+#    define ECONNABORTED WSAECONNABORTED
+#  endif
+#  ifndef ENOTCONN
+#    define ENOTCONN WSAENOTCONN
+#  endif
+#  ifndef ECONNREFUSED
+#    define ECONNREFUSED WSAECONNREFUSED
 #  endif
 #endif
 
