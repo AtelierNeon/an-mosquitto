@@ -50,6 +50,7 @@ $ProjectCaresWithDisabledApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_APPS) {$
 $ProjectCaresWithDisabledTestApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS} else {'OFF'}
 $ProjectCjsonWithDisabledTestApps = if ($Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS} else {'OFF'}
 $ProjectLibWebSocketsWithDisabledTestApps = if ($Env:MY_PROJECT_LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS} else {'OFF'}
+$ProjectLibWebSocketsWithExternalPoll = if ($Env:MY_PROJECT_LIBWEBSOCKETS_WITH_EXTERNAL_POLL) {$Env:MY_PROJECT_LIBWEBSOCKETS_WITH_EXTERNAL_POLL} else {'OFF'}
 $ProjectMosquittoWithLibWebSockets = if ($Env:MY_PROJECT_MOSQUITTO_WITH_LIBWEBSOCKETS) {$Env:MY_PROJECT_MOSQUITTO_WITH_LIBWEBSOCKETS} else {'OFF'}
 $ProjectMosquittoWithSharedCjson = if ($Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_CJSON) {$Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_CJSON} else {'OFF'}
 $ProjectMosquittoWithSharedLibraries = if ($Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBRARIES} else {'OFF'}
@@ -80,6 +81,9 @@ if ('ON'.Equals($ProjectCjsonWithDisabledTestApps)) {
 }
 if ('ON'.Equals($ProjectLibWebSocketsWithDisabledTestApps)) {
     $MyCmakeCommonArgumentList += "-DLIBWEBSOCKETS_WITH_DISABLED_TEST_APPS=$ProjectLibWebSocketsWithDisabledTestApps"
+}
+if ('ON'.Equals($ProjectLibWebSocketsWithExternalPoll)) {
+    $MyCmakeCommonArgumentList += "-DLIBWEBSOCKETS_WITH_EXTERNAL_POLL=$ProjectLibWebSocketsWithExternalPoll"
 }
 if ('ON'.Equals($ProjectMosquittoWithLibWebSockets)) {
     $MyCmakeCommonArgumentList += "-DMOSQUITTO_WITH_LIBWEBSOCKETS=$ProjectMosquittoWithLibWebSockets"
@@ -191,6 +195,7 @@ Write-Information "[PowerShell] Component information: c-ares with disabled apps
 Write-Information "[PowerShell] Component information: c-ares with disabled test apps: $ProjectCaresWithDisabledTestApps"
 Write-Information "[PowerShell] Component information: cJSON with disabled test apps: $ProjectCjsonWithDisabledTestApps"
 Write-Information "[PowerShell] Component information: libwebsockets with disabled test apps: $ProjectLibWebSocketsWithDisabledTestApps"
+Write-Information "[PowerShell] Component information: libwebsockets with external poll: $ProjectLibWebSocketsWithExternalPoll"
 Write-Information "[PowerShell] Component information: mosquitto with libwebsockets: $ProjectMosquittoWithLibWebSockets"
 Write-Information "[PowerShell] Component information: mosquitto with shared cJSON: $ProjectMosquittoWithSharedCjson"
 Write-Information "[PowerShell] Component information: mosquitto with shared libraries: $ProjectMosquittoWithSharedLibraries"
