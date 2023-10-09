@@ -46,21 +46,21 @@ $ProjectWithWorkaroundSpectre = if ($Env:MY_PROJECT_WITH_WORKAROUND_SPECTRE) {$E
 ####
 #### Project component level config
 ####
-$ProjectCaresWithDisabledApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_APPS} else {'OFF'}
-$ProjectCaresWithDisabledTestApps = if ($Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CARES_WITH_DISABLED_TEST_APPS} else {'OFF'}
-$ProjectCjsonWithDisabledTestApps = if ($Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_CJSON_WITH_DISABLED_TEST_APPS} else {'OFF'}
-$ProjectLibWebSocketsWithDisabledTestApps = if ($Env:MY_PROJECT_LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS} else {'OFF'}
+$ProjectCaresWithoutApps = if ($Env:MY_PROJECT_CARES_WITHOUT_APPS) {$Env:MY_PROJECT_CARES_WITHOUT_APPS} else {'OFF'}
+$ProjectCaresWithoutTestApps = if ($Env:MY_PROJECT_CARES_WITHOUT_TEST_APPS) {$Env:MY_PROJECT_CARES_WITHOUT_TEST_APPS} else {'OFF'}
+$ProjectCjsonWithoutTestApps = if ($Env:MY_PROJECT_CJSON_WITHOUT_TEST_APPS) {$Env:MY_PROJECT_CJSON_WITHOUT_TEST_APPS} else {'OFF'}
 $ProjectLibWebSocketsWithExternalPoll = if ($Env:MY_PROJECT_LIBWEBSOCKETS_WITH_EXTERNAL_POLL) {$Env:MY_PROJECT_LIBWEBSOCKETS_WITH_EXTERNAL_POLL} else {'OFF'}
+$ProjectLibWebSocketsWithoutTestApps = if ($Env:MY_PROJECT_LIBWEBSOCKETS_WITHOUT_TEST_APPS) {$Env:MY_PROJECT_LIBWEBSOCKETS_WITHOUT_TEST_APPS} else {'OFF'}
 $ProjectMosquittoWithLibWebSockets = if ($Env:MY_PROJECT_MOSQUITTO_WITH_LIBWEBSOCKETS) {$Env:MY_PROJECT_MOSQUITTO_WITH_LIBWEBSOCKETS} else {'OFF'}
 $ProjectMosquittoWithSharedCjson = if ($Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_CJSON) {$Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_CJSON} else {'OFF'}
 $ProjectMosquittoWithSharedLibraries = if ($Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBRARIES} else {'OFF'}
 $ProjectMosquittoWithSharedLibWebSockets = if ($Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBWEBSOCKETS) {$Env:MY_PROJECT_MOSQUITTO_WITH_SHARED_LIBWEBSOCKETS} else {'OFF'}
 $ProjectOpenSslWithDeprecatedCiphers = if ($Env:MY_PROJECT_OPENSSL_WITH_DEPRECATED_CIPHERS) {$Env:MY_PROJECT_OPENSSL_WITH_DEPRECATED_CIPHERS} else {'OFF'}
-$ProjectOpenSslWithDisabledApps = if ($Env:MY_PROJECT_OPENSSL_WITH_DISABLED_APPS) {$Env:MY_PROJECT_OPENSSL_WITH_DISABLED_APPS} else {'OFF'}
 $ProjectOpenSslWithSharedLibraries = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_LIBRARIES} else {'OFF'}
 $ProjectOpenSslWithSharedZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_SHARED_ZLIB} else {'OFF'}
 $ProjectOpenSslWithZlib = if ($Env:MY_PROJECT_OPENSSL_WITH_ZLIB) {$Env:MY_PROJECT_OPENSSL_WITH_ZLIB} else {'OFF'}
-$ProjectZlibWithDisabledTestApps = if ($Env:MY_PROJECT_ZLIB_WITH_DISABLED_TEST_APPS) {$Env:MY_PROJECT_ZLIB_WITH_DISABLED_TEST_APPS} else {'OFF'}
+$ProjectOpenSslWithoutApps = if ($Env:MY_PROJECT_OPENSSL_WITHOUT_APPS) {$Env:MY_PROJECT_OPENSSL_WITHOUT_APPS} else {'OFF'}
+$ProjectZlibWithoutTestApps = if ($Env:MY_PROJECT_ZLIB_WITHOUT_TEST_APPS) {$Env:MY_PROJECT_ZLIB_WITHOUT_TEST_APPS} else {'OFF'}
 
 ##
 ## My variables
@@ -70,20 +70,20 @@ $MyCmakeCommonArgumentList = @(
         "-T $ProjectToolset",
         "-DMY_REVISION=$ProjectRevision"
 )
-if ('ON'.Equals($ProjectCaresWithDisabledApps)) {
-    $MyCmakeCommonArgumentList += "-DCARES_WITH_DISABLED_APPS=$ProjectCaresWithDisabledApps"
+if ('ON'.Equals($ProjectCaresWithoutApps)) {
+    $MyCmakeCommonArgumentList += "-DCARES_WITHOUT_APPS=$ProjectCaresWithoutApps"
 }
-if ('ON'.Equals($ProjectCaresWithDisabledTestApps)) {
-    $MyCmakeCommonArgumentList += "-DCARES_WITH_DISABLED_TEST_APPS=$ProjectCaresWithDisabledTestApps"
+if ('ON'.Equals($ProjectCaresWithoutTestApps)) {
+    $MyCmakeCommonArgumentList += "-DCARES_WITHOUT_TEST_APPS=$ProjectCaresWithoutTestApps"
 }
-if ('ON'.Equals($ProjectCjsonWithDisabledTestApps)) {
-    $MyCmakeCommonArgumentList += "-DCJSON_WITH_DISABLED_TEST_APPS=$ProjectCjsonWithDisabledTestApps"
-}
-if ('ON'.Equals($ProjectLibWebSocketsWithDisabledTestApps)) {
-    $MyCmakeCommonArgumentList += "-DLIBWEBSOCKETS_WITH_DISABLED_TEST_APPS=$ProjectLibWebSocketsWithDisabledTestApps"
+if ('ON'.Equals($ProjectCjsonWithoutTestApps)) {
+    $MyCmakeCommonArgumentList += "-DCJSON_WITHOUT_TEST_APPS=$ProjectCjsonWithoutTestApps"
 }
 if ('ON'.Equals($ProjectLibWebSocketsWithExternalPoll)) {
     $MyCmakeCommonArgumentList += "-DLIBWEBSOCKETS_WITH_EXTERNAL_POLL=$ProjectLibWebSocketsWithExternalPoll"
+}
+if ('ON'.Equals($ProjectLibWebSocketsWithoutTestApps)) {
+    $MyCmakeCommonArgumentList += "-DLIBWEBSOCKETS_WITHOUT_TEST_APPS=$ProjectLibWebSocketsWithoutTestApps"
 }
 if ('ON'.Equals($ProjectMosquittoWithLibWebSockets)) {
     $MyCmakeCommonArgumentList += "-DMOSQUITTO_WITH_LIBWEBSOCKETS=$ProjectMosquittoWithLibWebSockets"
@@ -100,9 +100,6 @@ if ('ON'.Equals($ProjectMosquittoWithSharedLibWebSockets)) {
 if ('ON'.Equals($ProjectOpenSslWithDeprecatedCiphers)) {
     $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_DEPRECATED_CIPHERS=$ProjectOpenSslWithDeprecatedCiphers"
 }
-if ('ON'.Equals($ProjectOpenSslWithDisabledApps)) {
-    $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_DISABLED_APPS=$ProjectOpenSslWithDisabledApps"
-}
 if ('ON'.Equals($ProjectOpenSslWithSharedLibraries)) {
     $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_SHARED_LIBRARIES=$ProjectOpenSslWithSharedLibraries"
 }
@@ -112,8 +109,11 @@ if ('ON'.Equals($ProjectOpenSslWithSharedZlib)) {
 if ('ON'.Equals($ProjectOpenSslWithZlib)) {
     $MyCmakeCommonArgumentList += "-DOPENSSL_WITH_ZLIB=$ProjectOpenSslWithZlib"
 }
-if ('ON'.Equals($ProjectZlibWithDisabledTestApps)) {
-    $MyCmakeCommonArgumentList += "-DZLIB_WITH_DISABLED_TEST_APPS=$ProjectZlibWithDisabledTestApps"
+if ('ON'.Equals($ProjectOpenSslWithoutApps)) {
+    $MyCmakeCommonArgumentList += "-DOPENSSL_WITHOUT_APPS=$ProjectOpenSslWithoutApps"
+}
+if ('ON'.Equals($ProjectZlibWithoutTestApps)) {
+    $MyCmakeCommonArgumentList += "-DZLIB_WITHOUT_TEST_APPS=$ProjectZlibWithoutTestApps"
 }
 if ('ON'.Equals($ProjectWithOpenSSL111Preferred)) {
     $MyCmakeCommonArgumentList += "-DBUILD_WITH_OPENSSL_1_1_1_PREFERRED=$ProjectWithOpenSSL111Preferred"
@@ -191,21 +191,21 @@ Write-Information "[PowerShell] Project information: CMake toolset: `"$ProjectTo
 Write-Information "[PowerShell] Project information: CMake platform to build: $MyCmakePlatformToBuildListString"
 Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 1.1.1: $ProjectWithOpenSSL111Preferred"
 Write-Information "[PowerShell] Project information: Preferred to use OpenSSL 3.0: $ProjectWithOpenSSL30Preferred"
-Write-Information "[PowerShell] Component information: c-ares with disabled apps: $ProjectCaresWithDisabledApps"
-Write-Information "[PowerShell] Component information: c-ares with disabled test apps: $ProjectCaresWithDisabledTestApps"
-Write-Information "[PowerShell] Component information: cJSON with disabled test apps: $ProjectCjsonWithDisabledTestApps"
-Write-Information "[PowerShell] Component information: libwebsockets with disabled test apps: $ProjectLibWebSocketsWithDisabledTestApps"
+Write-Information "[PowerShell] Component information: c-ares without apps: $ProjectCaresWithoutApps"
+Write-Information "[PowerShell] Component information: c-ares without test apps: $ProjectCaresWithoutTestApps"
+Write-Information "[PowerShell] Component information: cJSON without test apps: $ProjectCjsonWithoutTestApps"
 Write-Information "[PowerShell] Component information: libwebsockets with external poll: $ProjectLibWebSocketsWithExternalPoll"
+Write-Information "[PowerShell] Component information: libwebsockets without test apps: $ProjectLibWebSocketsWithoutTestApps"
 Write-Information "[PowerShell] Component information: mosquitto with libwebsockets: $ProjectMosquittoWithLibWebSockets"
 Write-Information "[PowerShell] Component information: mosquitto with shared cJSON: $ProjectMosquittoWithSharedCjson"
 Write-Information "[PowerShell] Component information: mosquitto with shared libraries: $ProjectMosquittoWithSharedLibraries"
 Write-Information "[PowerShell] Component information: mosquitto with shared libwebsockets: $ProjectMosquittoWithSharedLibWebSockets"
 Write-Information "[PowerShell] Component information: OpenSSL with deprecated ciphers: $ProjectOpenSslWithDeprecatedCiphers"
-Write-Information "[PowerShell] Component information: OpenSSL with disabled apps: $ProjectOpenSslWithDisabledApps"
 Write-Information "[PowerShell] Component information: OpenSSL with shared libraries: $ProjectOpenSslWithSharedLibraries"
 Write-Information "[PowerShell] Component information: OpenSSL with shared Zlib: $ProjectOpenSslWithSharedZlib"
 Write-Information "[PowerShell] Component information: OpenSSL with Zlib: $ProjectOpenSslWithZlib"
-Write-Information "[PowerShell] Component information: Zlib with disabled test apps: $ProjectZlibWithDisabledTestApps"
+Write-Information "[PowerShell] Component information: OpenSSL without apps: $ProjectOpenSslWithoutApps"
+Write-Information "[PowerShell] Component information: Zlib without test apps: $ProjectZlibWithoutTestApps"
 
 
 

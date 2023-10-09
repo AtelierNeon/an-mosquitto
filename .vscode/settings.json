@@ -2,15 +2,15 @@
     "cmake.buildDirectory": "${workspaceFolder}/build/vscode",
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureSettings": {
-        "CARES_WITH_DISABLED_APPS": "ON",
-        "CARES_WITH_DISABLED_TEST_APPS": "ON",
-        "CJSON_WITH_DISABLED_TEST_APPS": "ON",
-        "LIBWEBSOCKETS_WITH_DISABLED_TEST_APPS": "ON",
+        "CARES_WITHOUT_APPS": "ON",
+        "CARES_WITHOUT_TEST_APPS": "ON",
+        "CJSON_WITHOUT_TEST_APPS": "ON",
         "LIBWEBSOCKETS_WITH_EXTERNAL_POLL": "ON",
+        "LIBWEBSOCKETS_WITHOUT_TEST_APPS": "ON",
         "MOSQUITTO_WITH_LIBWEBSOCKETS": "ON",
         "OPENSSL_WITH_DEPRECATED_CIPHERS": "ON",
-        "OPENSSL_WITH_DISABLED_APPS": "ON",
         "OPENSSL_WITH_ZLIB": "ON",
-        "ZLIB_WITH_DISABLED_TEST_APPS": "ON"
+        "OPENSSL_WITHOUT_APPS": "ON",
+        "ZLIB_WITHOUT_TEST_APPS": "ON"
     }
 }
